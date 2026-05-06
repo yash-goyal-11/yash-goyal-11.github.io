@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Brain, CheckCircle2, Play, Route, Search } from 'lucide-react'
 
 interface Token {
   id: number
@@ -81,30 +82,43 @@ export function TokenStreamAnimation() {
 
 export function AgentThinkingAnimation() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const logRef = useRef<HTMLDivElement>(null)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const [input, setInput] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [currentStage, setCurrentStage] = useState(-1)
   const [logs, setLogs] = useState<string[]>([])
 
   const stages = [
-    { label: 'context_parsing', icon: '📝', color: '#00b894' },
-    { label: 'reasoning_loop', icon: '🧠', color: '#a29bfe' },
-    { label: 'action_planning', icon: '📋', color: '#3cd0bd' },
-    { label: 'execution', icon: '⚡', color: '#ffd93d' },
-    { label: 'evaluation', icon: '✅', color: '#00b894' },
+    { label: 'context_parsing', icon: Search, color: '#00b894' },
+    { label: 'reasoning_loop', icon: Brain, color: '#a29bfe' },
+    { label: 'action_planning', icon: Route, color: '#3cd0bd' },
+    { label: 'execution', icon: Play, color: '#ffd93d' },
+    { label: 'evaluation', icon: CheckCircle2, color: '#00b894' },
   ]
 
   const processInput = () => {
     if (!input.trim() || isProcessing) return
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
     setIsProcessing(true)
     setCurrentStage(0)
-    setLogs([`> Target: "${input}"`, 'Initializing agent pipeline...'])
+    setLogs([
+      `> Target: "${input}"`,
+      'Initializing agent pipeline...',
+      `[${stages[0].label}] Context parsed.`,
+    ])
     
     let step = 0
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       step++
       if (step >= stages.length) {
-        clearInterval(interval)
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current)
+          intervalRef.current = null
+        }
         setIsProcessing(false)
         setCurrentStage(-1)
         setLogs(prev => [...prev, '✓ Task completed successfully. Waiting for next input...'])
@@ -115,6 +129,20 @@ export function AgentThinkingAnimation() {
       }
     }, 1200)
   }
+
+  useEffect(() => {
+    if (logRef.current) {
+      logRef.current.scrollTop = logRef.current.scrollHeight
+    }
+  }, [logs])
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [])
 
   return (
     <div
@@ -147,8 +175,21 @@ export function AgentThinkingAnimation() {
 
       {/* Nodes */}
       <div className="flex justify-between items-center py-4 relative">
-        {/* Connecting Line */}
-        <div className="absolute top-1/2 left-4 right-4 h-0.5 bg-[#1e293b] -z-10" />
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
+          <line x1="8%" y1="50%" x2="92%" y2="50%" stroke="rgba(60, 208, 189, 0.25)" strokeWidth="2" />
+          {[18, 38, 58, 78].map((x) => (
+            <line
+              key={x}
+              x1={`${x}%`}
+              y1="50%"
+              x2={`${x + 8}%`}
+              y2="50%"
+              stroke="rgba(60, 208, 189, 0.55)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          ))}
+        </svg>
         
         {stages.map((s, index) => (
           <div
@@ -161,17 +202,23 @@ export function AgentThinkingAnimation() {
                 : 'opacity-30 scale-90 grayscale'
             }`}
           >
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 ${
               index === currentStage ? 'border-[#3cd0bd] bg-[#3cd0bd]/20' : 'border-[#1e293b] bg-[#0f172a]'
             }`}>
-              <span className="text-sm">{s.icon}</span>
+              <s.icon className="h-4 w-4" style={{ color: s.color }} />
             </div>
+            <span className="text-[10px] uppercase tracking-wider text-[#94a3b8]">
+              {s.label.replace('_', ' ')}
+            </span>
           </div>
         ))}
       </div>
 
       {/* Output Console */}
-      <div className="mt-2 h-24 bg-[#0f172a] rounded border border-[#1e293b] p-2 overflow-y-auto font-mono text-xs text-[#a1a1aa] flex flex-col gap-1">
+      <div
+        ref={logRef}
+        className="mt-2 h-24 bg-[#0f172a] rounded border border-[#1e293b] p-2 overflow-y-auto font-mono text-xs text-[#a1a1aa] flex flex-col gap-1"
+      >
         {logs.length === 0 ? (
           <span className="opacity-50">Log output will appear here...</span>
         ) : (
@@ -188,6 +235,38 @@ export function AgentThinkingAnimation() {
 
 export function NeuralNetworkPulse() {
   const [activeNodes, setActiveNodes] = useState<{ layer: number; node: number }[]>([])
+
+  const layers = [
+    { x: 40, nodes: 4 },
+    { x: 140, nodes: 6 },
+    { x: 240, nodes: 5 },
+  ]
+  const height = 140
+  const yPadding = 12
+  const layerPositions = layers.map((layer) => {
+    const count = layer.nodes
+    const gap = count > 1 ? (height - yPadding * 2) / (count - 1) : 0
+    return Array.from({ length: count }, (_, index) => ({
+      x: layer.x,
+      y: yPadding + index * gap,
+    }))
+  })
+
+  const connections = layerPositions[0].flatMap((pos, i) => {
+    const targets = [i % layerPositions[1].length, (i + 2) % layerPositions[1].length]
+    return targets.map((target) => ({
+      from: pos,
+      to: layerPositions[1][target],
+    }))
+  }).concat(
+    layerPositions[1].flatMap((pos, i) => {
+      const targets = [i % layerPositions[2].length, (i + 1) % layerPositions[2].length]
+      return targets.map((target) => ({
+        from: pos,
+        to: layerPositions[2][target],
+      }))
+    })
+  )
 
   const triggerNode = (layer: number, node: number) => {
     setActiveNodes(prev => [...prev, { layer, node }])
@@ -208,25 +287,44 @@ export function NeuralNetworkPulse() {
   return (
     <div className="space-y-2 rounded-lg border border-[#3cd0bd]/20 bg-[#0a1118]/50 p-4 backdrop-blur-sm">
       <div className="text-[#64748b] text-xs mb-3">Interactive Network Layer (Click any node to forward-propagate)</div>
-      <div className="flex justify-between items-center px-4 relative h-32">
-        {/* SVG Lines between layers */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" style={{ zIndex: 0 }}>
-          <path d="M 50 20 L 150 40 M 50 20 L 150 70 M 50 60 L 150 40 M 50 60 L 150 70 M 150 40 L 250 50 M 150 70 L 250 50" stroke="#3cd0bd" strokeWidth="1" />
+      <div className="relative h-36">
+        <svg
+          className="absolute inset-0 h-full w-full pointer-events-none"
+          viewBox="0 0 280 140"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          {connections.map((line, index) => (
+            <line
+              key={index}
+              x1={line.from.x}
+              y1={line.from.y}
+              x2={line.to.x}
+              y2={line.to.y}
+              stroke="rgba(60, 208, 189, 0.4)"
+              strokeWidth="1.5"
+            />
+          ))}
         </svg>
 
-        {[...Array(3)].map((_, layer) => (
-          <div key={layer} className="flex flex-col gap-3 z-10">
-            {[...Array(layer === 1 ? 6 : layer === 0 ? 4 : 5)].map((_, node) => {
-              const isActive = activeNodes.some(n => n.layer === layer && n.node === node)
+        {layerPositions.map((layer, layerIndex) => (
+          <div key={layerIndex} className="absolute inset-0">
+            {layer.map((pos, nodeIndex) => {
+              const isActive = activeNodes.some(n => n.layer === layerIndex && n.node === nodeIndex)
               return (
                 <div
-                  key={node}
-                  onClick={() => triggerNode(layer, node)}
-                  className={`w-4 h-4 rounded-full cursor-pointer transition-all duration-300 relative border-2 ${
+                  key={`${layerIndex}-${nodeIndex}`}
+                  onClick={() => triggerNode(layerIndex, nodeIndex)}
+                  className={`absolute z-10 w-4 h-4 rounded-full cursor-pointer transition-all duration-300 border-2 ${
                     isActive
                       ? 'bg-[#3cd0bd] border-[#3cd0bd] scale-150 shadow-[0_0_15px_#3cd0bd]'
                       : 'bg-[#0f172a] border-[#1e293b] hover:border-[#3cd0bd]/50 hover:bg-[#3cd0bd]/20'
                   }`}
+                  style={{
+                    left: `${(pos.x / 280) * 100}%`,
+                    top: `${(pos.y / 140) * 100}%`,
+                    transform: 'translate(-50%, -50%)',
+                  }}
                 />
               )
             })}

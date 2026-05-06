@@ -273,13 +273,13 @@ export default function About() {
               ref={bodyRef}
               className="mb-10 text-lg leading-relaxed text-[#94a3b8] opacity-0"
             >
-              I don't just analyze data; I build intelligent systems that solve real
-              problems. From predictive models to GenAI agents, my work sits at the
-              intersection of robust engineering and cutting-edge research. Currently
-              interning at <strong className="text-[#e2e8f0]">SAS Institute</strong> and
-              tutoring at the{' '}
-              <strong className="text-[#e2e8f0]">University of Sydney</strong>, I bring
-              a maker's mindset and a mission to solve problems that matter.
+              I build production-grade AI systems end to end, from LLM-powered agents
+              and knowledge-graph QA pipelines to GPU-accelerated ML pipelines in live
+              environments. My work blends rigorous engineering with applied research,
+              delivering reliable systems that scale. Currently interning at{' '}
+              <strong className="text-[#e2e8f0]">SAS Institute</strong> and tutoring at the{' '}
+              <strong className="text-[#e2e8f0]">University of Sydney</strong>, I collaborate
+              across teams to translate business goals into measurable outcomes.
             </p>
 
             <div

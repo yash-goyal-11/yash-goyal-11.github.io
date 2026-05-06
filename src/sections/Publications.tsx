@@ -22,13 +22,13 @@ const publications: Publication[] = [
   {
     title: 'Antiprotozoal Peptide Prediction using ML algorithms and feature selection',
     journal: 'Heliyon',
-    description: 'Co-authored research on predicting antiprotozoal peptides.',
+    description: 'Co-authored ML study on antiprotozoal peptide prediction and feature selection.',
     result: 'Achieved significant reduction in false-positive rates.',
   },
   {
     title: 'iIL13Pred: Improved Prediction of IL-13 Inducing Peptides',
     journal: 'BMC Bioinformatics',
-    description: 'Advanced prediction model for IL-13 inducing peptides.',
+    description: 'Improved peptide prediction model with stronger generalization.',
     result: '15% improvement in prediction accuracy over prior methods.',
   },
 ]
@@ -53,7 +53,7 @@ const awards: Award[] = [
     title: 'Hackathon Mentor',
     year: '2025',
     description:
-      'Humanitarian Innovation Hackathon, USYD - Mentored teams that placed 1st & 2nd.',
+      'Humanitarian Innovation Hackathon, USYD - Mentored teams that placed 1st and 2nd.',
   },
 ]
 
@@ -106,7 +106,7 @@ export default function Publications() {
     <section
       id="publications"
       ref={sectionRef}
-      className="relative z-10 px-4 py-32 md:py-48"
+      className="relative z-10 px-4 py-8 md:py-12"
     >
       <div className="mx-auto max-w-6xl">
         {/* Publications */}

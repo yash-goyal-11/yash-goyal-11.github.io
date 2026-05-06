@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
 const floatingSkills = [
-  'Python', 'PyTorch', 'LangChain', 'AWS', 'Docker',
-  'Neo4j', 'TensorFlow', 'FastAPI', 'Computer Vision',
+  'Python', 'LangChain', 'LangGraph', 'Azure ML', 'AWS',
+  'Docker', 'Kubernetes', 'MLflow', 'Neo4j',
 ]
 
 export default function Hero() {
@@ -179,7 +179,7 @@ export default function Hero() {
           className="mt-6 text-lg font-light tracking-[0.2em] text-[#e2e8f0] opacity-0 md:text-xl"
           style={{ fontFamily: 'Inter, sans-serif' }}
         >
-          ML ENGINEER & DATA SCIENTIST
+          PRODUCTION ML ENGINEER & DATA SCIENTIST
         </p>
 
         <div ref={ctaRef} className="mt-12 flex justify-center gap-6 opacity-0">

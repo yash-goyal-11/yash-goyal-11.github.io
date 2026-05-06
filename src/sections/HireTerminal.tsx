@@ -32,7 +32,7 @@ const AVAILABLE_COMMANDS: Record<string, Command> = {
       '',
       'AI / ML / GenAI:',
       '  ✓ LLMs, LangChain, LangGraph, Hugging Face',
-      '  ✓ PyTorch, TensorFlow, XGBoost, Scikit-Learn',
+      '  ✓ PyTorch, TensorFlow, XGBoost, LightGBM',
       '  ✓ Agentic AI, RAG, Computer Vision',
       '',
       'Cloud & MLOps:',
@@ -43,7 +43,7 @@ const AVAILABLE_COMMANDS: Record<string, Command> = {
       '  ✓ Python, SQL, Neo4j, FastAPI, Flask',
       '  ✓ Pandas, NumPy, REST APIs, Git/GitHub',
       '',
-      'Confidence Level: EXPERT across all domains',
+      'Confidence Level: Production-ready across core domains',
     ],
   },
   projects: {
@@ -62,9 +62,6 @@ const AVAILABLE_COMMANDS: Record<string, Command> = {
       '',
       '4. AI Heart Disease Prediction',
       '   → 90%+ accuracy, PCA/SMOTE, ensemble models',
-      '',
-      '5. Sports Game Analysis (YOLOv5)',
-      '   → Real-time player tracking, stat dashboards',
     ],
   },
   experience: {
@@ -85,9 +82,6 @@ const AVAILABLE_COMMANDS: Record<string, Command> = {
       '',
       'Software Eng Intern - ITS Lab, IIT Madras',
       '  Oct 2023 - Feb 2024 | -25% latency, +30% engagement',
-      '',
-      'Backend Developer - Simple Elegant Solutions',
-      '  Mar 2023 - Apr 2023 | +40% efficiency improvement',
     ],
   },
   education: {
@@ -152,8 +146,8 @@ const UNKNOWN_COMMAND: Command = {
 export default function HireTerminal() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const terminalRef = useRef<HTMLDivElement>(null)
+  const terminalBodyRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
   const [history, setHistory] = useState<Command[]>([
     {
       input: '',
@@ -204,15 +198,8 @@ export default function HireTerminal() {
   }
 
   useEffect(() => {
-    // Scroll terminal to the very bottom smoothly
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    
-    // Auto-expand height
-    if (terminalRef.current) {
-      const contentHeight = terminalRef.current.scrollHeight
-      const maxHeight = window.innerHeight * 0.75
-      const newHeight = Math.min(contentHeight + 40, maxHeight)
-      terminalRef.current.style.maxHeight = `${newHeight}px`
+    if (terminalBodyRef.current) {
+      terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight
     }
   }, [history])
 
@@ -278,7 +265,11 @@ export default function HireTerminal() {
           </div>
 
           {/* Terminal body */}
-          <div className="terminal-content max-h-[60vh] overflow-y-auto p-4 font-mono text-sm transition-all duration-300" data-lenis-prevent>
+          <div
+            ref={terminalBodyRef}
+            className="terminal-content max-h-[60vh] overflow-y-auto p-4 font-mono text-sm transition-all duration-300"
+            data-lenis-prevent
+          >
             {history.map((cmd, i) => (
               <div key={i} className="mb-4">
                 {cmd.input && (
@@ -324,7 +315,7 @@ export default function HireTerminal() {
                 spellCheck={false}
               />
             </form>
-            <div ref={messagesEndRef} className="h-4" />
+            <div className="h-4" />
           </div>
 
           {/* Blinking cursor overlay */}

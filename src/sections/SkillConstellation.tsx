@@ -1,25 +1,35 @@
 import { useEffect, useRef, useState } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Html, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Holographic Skill Constellation
+const CONSTELLATION_SKILLS = [
+  'Python', 'PyTorch', 'LangChain', 'LangGraph', 'Hugging Face', 'RAG',
+  'Azure ML', 'AWS', 'Docker', 'Kubernetes', 'MLflow', 'Neo4j',
+]
+
+const CONSTELLATION_POINTS = CONSTELLATION_SKILLS.map((label, i) => {
+  const angle = (i / CONSTELLATION_SKILLS.length) * Math.PI * 2
+  const radius = 8
+  return {
+    label,
+    position: new THREE.Vector3(
+      Math.cos(angle) * radius,
+      Math.sin(angle) * radius * 0.6,
+      Math.sin(angle * 2) * 3
+    ),
+  }
+})
+
 function HolographicConstellation() {
   const groupRef = useRef<THREE.Group>(null)
   const particlesRef = useRef<THREE.Points>(null)
   const mouseRef = useRef({ x: 0, y: 0 })
-  const { camera } = useThree()
 
-  const skills = [
-    'Python', 'PyTorch', 'LangChain', 'AWS', 'Docker', 'Neo4j',
-    'TensorFlow', 'FastAPI', 'Computer Vision', 'NVIDIA', 'Azure ML', 'LLMs'
-  ]
-
-  // Track mouse movement
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       mouseRef.current.x = (event.clientX / window.innerWidth) * 2 - 1
@@ -30,22 +40,19 @@ function HolographicConstellation() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  // Create particle geometry for skills
   useEffect(() => {
     if (!groupRef.current) return
 
-    const positions = new Float32Array(skills.length * 3)
-    const colors = new Float32Array(skills.length * 3)
-    
-    for (let i = 0; i < skills.length; i++) {
-      const angle = (i / skills.length) * Math.PI * 2
-      const radius = 8
-      positions[i * 3] = Math.cos(angle) * radius
-      positions[i * 3 + 1] = Math.sin(angle) * radius * 0.6
-      positions[i * 3 + 2] = Math.sin(angle * 2) * 3
+    const positions = new Float32Array(CONSTELLATION_POINTS.length * 3)
+    const colors = new Float32Array(CONSTELLATION_POINTS.length * 3)
 
-      // Color gradient from teal to emerald
-      const hue = 0.4 + (i / skills.length) * 0.3
+    for (let i = 0; i < CONSTELLATION_POINTS.length; i++) {
+      const point = CONSTELLATION_POINTS[i]
+      positions[i * 3] = point.position.x
+      positions[i * 3 + 1] = point.position.y
+      positions[i * 3 + 2] = point.position.z
+
+      const hue = 0.4 + (i / CONSTELLATION_POINTS.length) * 0.3
       colors[i * 3] = Math.cos(hue) * 0.5 + 0.5
       colors[i * 3 + 1] = Math.sin(hue) * 0.5 + 0.5
       colors[i * 3 + 2] = Math.sin(hue * 2) * 0.5 + 0.5
@@ -73,19 +80,12 @@ function HolographicConstellation() {
     }
   }, [])
 
-  // Animate rotation with mouse interaction
   useFrame((state) => {
     if (groupRef.current) {
-      // Mouse-controlled rotation
-      groupRef.current.rotation.x = mouseRef.current.y * 0.5 + Math.sin(state.clock.elapsedTime * 0.3) * 0.2
-      groupRef.current.rotation.y = mouseRef.current.x * 0.5 + state.clock.elapsedTime * 0.2
-      groupRef.current.rotation.z += 0.0003
+      groupRef.current.rotation.x = mouseRef.current.y * 0.35 + Math.sin(state.clock.elapsedTime * 0.3) * 0.15
+      groupRef.current.rotation.y = mouseRef.current.x * 0.35 + state.clock.elapsedTime * 0.12
+      groupRef.current.rotation.z += 0.0002
     }
-
-    // Animated camera orbit with mouse influence
-    camera.position.x = (Math.sin(state.clock.elapsedTime * 0.1) * 15) + (mouseRef.current.x * 5)
-    camera.position.z = (Math.cos(state.clock.elapsedTime * 0.1) * 15) + (mouseRef.current.y * 5)
-    camera.lookAt(0, 0, 0)
   })
 
   return (
@@ -97,41 +97,24 @@ function HolographicConstellation() {
   )
 }
 
-// Skill connection lines
 function ConnectionLines() {
   const linesRef = useRef<THREE.LineSegments>(null)
-  
+
   useFrame(() => {
     if (linesRef.current) {
       linesRef.current.rotation.z += 0.0001
     }
   })
 
-  const skills = [
-    'Python', 'PyTorch', 'LangChain', 'AWS', 'Docker', 'Neo4j',
-    'TensorFlow', 'FastAPI', 'Computer Vision', 'NVIDIA', 'Azure ML', 'LLMs'
-  ]
-
-  const points = skills.map((_, i) => {
-    const angle = (i / skills.length) * Math.PI * 2
-    const radius = 8
-    return new THREE.Vector3(
-      Math.cos(angle) * radius,
-      Math.sin(angle) * radius * 0.6,
-      Math.sin(angle * 2) * 3
-    )
-  })
-
+  const points = CONSTELLATION_POINTS.map((point) => point.position)
   const geometry = new THREE.BufferGeometry()
   const positions: number[] = []
 
-  // Connect adjacent skills
   for (let i = 0; i < points.length; i++) {
     const next = (i + 1) % points.length
     positions.push(points[i].x, points[i].y, points[i].z)
     positions.push(points[next].x, points[next].y, points[next].z)
-    
-    // Connect to center
+
     if (i % 2 === 0) {
       positions.push(points[i].x, points[i].y, points[i].z)
       positions.push(0, 0, 0)
@@ -153,9 +136,28 @@ function ConnectionLines() {
   )
 }
 
+function SkillLabels() {
+  return (
+    <group>
+      {CONSTELLATION_POINTS.map((point) => (
+        <Html
+          key={point.label}
+          position={[point.position.x, point.position.y, point.position.z]}
+          distanceFactor={10}
+          style={{ pointerEvents: 'none' }}
+          transform
+        >
+          <div className="rounded-full border border-[#3cd0bd]/30 bg-[#030507]/70 px-3 py-1 text-xs text-[#3cd0bd] shadow-[0_0_12px_rgba(60,208,189,0.2)]">
+            {point.label}
+          </div>
+        </Html>
+      ))}
+    </group>
+  )
+}
+
 export default function SkillConstellation() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const canvasRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -169,11 +171,6 @@ export default function SkillConstellation() {
 
     return () => ctx.revert()
   }, [])
-
-  const skills = [
-    'Python', 'PyTorch', 'LangChain', 'AWS', 'Docker', 'Neo4j',
-    'TensorFlow', 'FastAPI', 'Computer Vision', 'NVIDIA', 'Azure ML', 'LLMs'
-  ]
 
   return (
     <section
@@ -189,38 +186,29 @@ export default function SkillConstellation() {
           My expertise visualized as an interactive holographic system
         </p>
 
-        {/* 3D Canvas */}
-        <div
-          ref={canvasRef}
-          className="relative mx-auto h-[60vh] w-full overflow-hidden rounded-3xl border border-white/10 bg-[#0a1118]/80 backdrop-blur-sm cursor-grab active:cursor-grabbing pointer-events-auto"
-        >
+        <div className="relative mx-auto h-[60vh] w-full overflow-hidden rounded-3xl border border-white/10 bg-[#0a1118]/80 backdrop-blur-sm cursor-grab active:cursor-grabbing pointer-events-auto">
           {isVisible && (
-            <Canvas camera={{ position: [0, 0, 15], fov: 60 }}>
-              <OrbitControls enableZoom={false} enablePan={false} autoRotate={true} autoRotateSpeed={0.5} maxPolarAngle={Math.PI / 1.5} minPolarAngle={Math.PI / 4} />
+            <Canvas
+              camera={{ position: [0, 0, 16], fov: 55 }}
+              dpr={[1, 1.5]}
+              gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+            >
+              <OrbitControls
+                enableZoom={false}
+                enablePan={false}
+                autoRotate
+                autoRotateSpeed={0.4}
+                enableDamping
+                dampingFactor={0.08}
+                maxPolarAngle={Math.PI / 1.6}
+                minPolarAngle={Math.PI / 4}
+              />
               <HolographicConstellation />
               <ConnectionLines />
+              <SkillLabels />
             </Canvas>
           )}
 
-          {/* Skill labels overlay */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="grid grid-cols-4 gap-4 text-center">
-              {skills.map((skill, i) => (
-                <div
-                  key={skill}
-                  className="text-xs font-mono text-[#3cd0bd]/60 opacity-50 hover:opacity-100 transition-opacity"
-                  style={{
-                    animation: `float ${3 + i * 0.2}s ease-in-out infinite`,
-                    animationDelay: `${i * 0.1}s`,
-                  }}
-                >
-                  {skill}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Glow effect */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#3cd0bd]/5 rounded-full blur-3xl" />
             <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-[#00b894]/5 rounded-full blur-3xl" />
@@ -231,13 +219,6 @@ export default function SkillConstellation() {
           Rotate to explore • Each node represents a core competency • Lines show interconnections
         </p>
       </div>
-
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-      `}</style>
     </section>
   )
 }

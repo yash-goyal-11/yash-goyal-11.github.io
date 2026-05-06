@@ -22,52 +22,59 @@ interface GraphEdge {
 }
 
 const nodes: GraphNode[] = [
-  // Core
   { id: 'yash', label: 'Yash Goyal', type: 'core', position: new THREE.Vector3(0, 0, 0), velocity: new THREE.Vector3(), mass: 5 },
   // Skills
   { id: 'python', label: 'Python', type: 'skill', position: new THREE.Vector3(5, 2, 1), velocity: new THREE.Vector3(), mass: 2 },
   { id: 'pytorch', label: 'PyTorch', type: 'skill', position: new THREE.Vector3(4, -2, 3), velocity: new THREE.Vector3(), mass: 2 },
   { id: 'langchain', label: 'LangChain', type: 'skill', position: new THREE.Vector3(-4, 3, 2), velocity: new THREE.Vector3(), mass: 2 },
-  { id: 'aws', label: 'AWS', type: 'skill', position: new THREE.Vector3(-3, -3, -1), velocity: new THREE.Vector3(), mass: 2 },
+  { id: 'langgraph', label: 'LangGraph', type: 'skill', position: new THREE.Vector3(-6, 1, 1), velocity: new THREE.Vector3(), mass: 2 },
+  { id: 'azureml', label: 'Azure ML', type: 'skill', position: new THREE.Vector3(-3, -3, -1), velocity: new THREE.Vector3(), mass: 2 },
+  { id: 'aws', label: 'AWS', type: 'skill', position: new THREE.Vector3(-1, -4, -2), velocity: new THREE.Vector3(), mass: 2 },
   { id: 'docker', label: 'Docker', type: 'skill', position: new THREE.Vector3(3, 4, -2), velocity: new THREE.Vector3(), mass: 2 },
+  { id: 'kubernetes', label: 'Kubernetes', type: 'skill', position: new THREE.Vector3(2, 6, -1), velocity: new THREE.Vector3(), mass: 2 },
+  { id: 'mlflow', label: 'MLflow', type: 'skill', position: new THREE.Vector3(1, -5, 2), velocity: new THREE.Vector3(), mass: 2 },
   { id: 'neo4j', label: 'Neo4j', type: 'skill', position: new THREE.Vector3(-5, 1, -3), velocity: new THREE.Vector3(), mass: 2 },
-  { id: 'tensorflow', label: 'TensorFlow', type: 'skill', position: new THREE.Vector3(2, -4, 2), velocity: new THREE.Vector3(), mass: 2 },
   { id: 'fastapi', label: 'FastAPI', type: 'skill', position: new THREE.Vector3(-2, 5, 1), velocity: new THREE.Vector3(), mass: 2 },
   { id: 'cv', label: 'Computer Vision', type: 'skill', position: new THREE.Vector3(6, 0, -2), velocity: new THREE.Vector3(), mass: 2 },
   // Projects
-  { id: 'mlops', label: 'MLOps Monitor', type: 'project', position: new THREE.Vector3(8, 3, 0), velocity: new THREE.Vector3(), mass: 3 },
+  { id: 'mlops', label: 'Agentic MLOps Monitor', type: 'project', position: new THREE.Vector3(8, 3, 0), velocity: new THREE.Vector3(), mass: 3 },
   { id: 'graphqa', label: 'Graph-QA Agent', type: 'project', position: new THREE.Vector3(-7, 2, 3), velocity: new THREE.Vector3(), mass: 3 },
   { id: 'traffic', label: 'Traffic Analysis', type: 'project', position: new THREE.Vector3(5, -5, -1), velocity: new THREE.Vector3(), mass: 3 },
+  { id: 'heart', label: 'Heart Disease Prediction', type: 'project', position: new THREE.Vector3(7, -4, 3), velocity: new THREE.Vector3(), mass: 3 },
   // Experience
   { id: 'sas', label: 'SAS Institute', type: 'experience', position: new THREE.Vector3(-6, -3, -2), velocity: new THREE.Vector3(), mass: 3 },
   { id: 'airlab', label: 'AirLabOne', type: 'experience', position: new THREE.Vector3(7, -2, 3), velocity: new THREE.Vector3(), mass: 3 },
   { id: 'usyd', label: 'USYD Tutor', type: 'experience', position: new THREE.Vector3(-3, 6, -2), velocity: new THREE.Vector3(), mass: 3 },
+  { id: 'iit', label: 'IIT Madras', type: 'experience', position: new THREE.Vector3(0, 7, 2), velocity: new THREE.Vector3(), mass: 3 },
 ]
 
 const edges: GraphEdge[] = [
   { source: 'yash', target: 'python', strength: 1 },
   { source: 'yash', target: 'pytorch', strength: 1 },
   { source: 'yash', target: 'langchain', strength: 1 },
+  { source: 'yash', target: 'langgraph', strength: 1 },
+  { source: 'yash', target: 'azureml', strength: 1 },
   { source: 'yash', target: 'aws', strength: 1 },
   { source: 'yash', target: 'docker', strength: 1 },
   { source: 'yash', target: 'neo4j', strength: 1 },
   { source: 'python', target: 'pytorch', strength: 0.5 },
-  { source: 'python', target: 'tensorflow', strength: 0.5 },
   { source: 'python', target: 'fastapi', strength: 0.5 },
   { source: 'langchain', target: 'neo4j', strength: 0.7 },
-  { source: 'python', target: 'mlops', strength: 0.8 },
-  { source: 'aws', target: 'mlops', strength: 0.8 },
+  { source: 'langgraph', target: 'graphqa', strength: 0.9 },
+  { source: 'azureml', target: 'mlops', strength: 0.8 },
+  { source: 'mlflow', target: 'mlops', strength: 0.7 },
   { source: 'docker', target: 'mlops', strength: 0.8 },
-  { source: 'langchain', target: 'graphqa', strength: 0.9 },
+  { source: 'python', target: 'mlops', strength: 0.7 },
   { source: 'neo4j', target: 'graphqa', strength: 0.9 },
   { source: 'cv', target: 'traffic', strength: 0.9 },
   { source: 'aws', target: 'traffic', strength: 0.7 },
-  { source: 'sas', target: 'aws', strength: 0.6 },
+  { source: 'python', target: 'heart', strength: 0.7 },
+  { source: 'sas', target: 'azureml', strength: 0.6 },
   { source: 'sas', target: 'docker', strength: 0.5 },
   { source: 'airlab', target: 'pytorch', strength: 0.7 },
   { source: 'airlab', target: 'cv', strength: 0.6 },
   { source: 'usyd', target: 'python', strength: 0.6 },
-  { source: 'usyd', target: 'fastapi', strength: 0.5 },
+  { source: 'iit', target: 'fastapi', strength: 0.5 },
 ]
 
 const NODE_COLORS: Record<string, number> = {

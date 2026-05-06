@@ -54,6 +54,19 @@ const projects: Project[] = [
       'ML congestion forecasting',
     ],
   },
+  {
+    title: 'AI Heart Disease Prediction',
+    subtitle: 'Clinical Risk Modeling',
+    description:
+      'Ensemble ML models with 90%+ accuracy using PCA/SMOTE, benchmarking against neural baselines to improve clinical risk scoring.',
+    tech: ['Python', 'scikit-learn', 'XGBoost', 'Pandas'],
+    image: '/project-1-bg.jpg',
+    highlights: [
+      '90%+ model accuracy',
+      'PCA + SMOTE for class balance',
+      'Benchmarked against neural baseline',
+    ],
+  },
 ]
 
 export default function Projects() {
@@ -70,6 +83,7 @@ export default function Projects() {
 
       // Calculate scroll distance
       const totalWidth = track.scrollWidth - container.offsetWidth
+      const endPadding = window.innerHeight * 0.2 // Reduced end padding for tighter scroll spacing
 
       // Horizontal scroll
       gsap.to(track, {
@@ -77,8 +91,8 @@ export default function Projects() {
         ease: 'none',
         scrollTrigger: {
           trigger: container,
-          start: 'top 20%',
-          end: () => `+=${totalWidth}`,
+          start: 'center center', // Pin perfectly in the middle
+          end: () => `+=${totalWidth + endPadding}`,
           scrub: 0.5,
           pin: true,
           anticipatePin: 1,
@@ -111,26 +125,26 @@ export default function Projects() {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative z-10"
+      className="relative z-10 pb-10"
     >
-      <div className="py-16 text-center">
+      <div className="py-8 text-center">
         <h2 className="font-display text-4xl font-bold text-white md:text-5xl">
           Featured <span className="text-[#3cd0bd]">Projects</span>
         </h2>
         <p className="mt-4 text-[#64748b]">Scroll to explore</p>
       </div>
 
-      <div ref={containerRef} className="relative h-screen overflow-hidden">
+      <div ref={containerRef} className="relative flex h-[85vh] w-full items-center overflow-hidden">
         <div
           ref={trackRef}
-          className="flex h-full items-center gap-8 px-8 md:px-16"
+          className="flex h-fit items-center gap-8 px-8 md:px-16"
           style={{ width: 'fit-content' }}
         >
           {projects.map((project, index) => (
             <div
               key={index}
               ref={(el) => { cardRefs.current[index] = el }}
-              className="group relative h-[75vh] w-[85vw] shrink-0 overflow-hidden rounded-3xl md:w-[70vw]"
+              className="group relative h-[65vh] w-[85vw] shrink-0 overflow-hidden rounded-3xl md:w-[70vw]"
             >
               {/* Background image */}
               <div className="absolute inset-0">

@@ -19,9 +19,9 @@ const experiences: ExperienceItem[] = [
     location: 'Sydney, Australia',
     period: 'Jan 2026 - Present',
     highlights: [
-      'Built and deployed real-time analytics workflows on SAS Viya',
-      'Winner of SAS Viya for Learners Challenge (ANZ) 2025',
-      'Developed internal tooling and automation scripts',
+      'Built real-time analytics workflows on SAS Viya for end-to-end ML ops',
+      'Improved deployment reliability with internal tooling and automation',
+      'Winner: SAS Viya for Learners Challenge (ANZ) 2025',
     ],
   },
   {
@@ -30,9 +30,9 @@ const experiences: ExperienceItem[] = [
     location: 'Sydney, Australia',
     period: 'Sep 2025 - Dec 2025',
     highlights: [
-      'Designed GPU-accelerated ML pipelines with NVIDIA Omniverse',
-      'Deployed systems for real-time model insight extraction',
-      'Applied CI/CD and GitHub-based workflows',
+      'Designed GPU-accelerated ML pipelines integrated with NVIDIA Omniverse',
+      'Built real-time insight extraction systems with high reliability',
+      'Applied CI/CD and GitHub workflows to streamline releases',
     ],
   },
   {
@@ -43,7 +43,7 @@ const experiences: ExperienceItem[] = [
     highlights: [
       'Deliver tutorials on Java and OOP design patterns',
       'Design practice problems and code-review frameworks',
-      'Communicate complex technical concepts to undergrad students',
+      'Provide targeted feedback to improve student outcomes',
     ],
   },
   {
@@ -55,17 +55,6 @@ const experiences: ExperienceItem[] = [
       'Built Python/Flask backend for real-time traffic video analytics',
       'Reduced processing latency by ~25% through pipeline optimization',
       'Shipped full-stack solution with live metrics dashboard',
-    ],
-  },
-  {
-    role: 'Backend Developer',
-    company: 'Simple Elegant Solutions Pvt. Ltd.',
-    location: 'New Delhi, India',
-    period: 'Mar 2023 - Apr 2023',
-    highlights: [
-      'Developed Python-based data management system',
-      'Improved data handling efficiency by ~40%',
-      'Collaborated in agile sprints to shorten time-to-market',
     ],
   },
 ]

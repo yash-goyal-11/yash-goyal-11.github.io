@@ -7,7 +7,6 @@ import * as THREE from 'three'
 function DataPipelineVisualization() {
   const sceneRef = useRef<THREE.Group>(null)
   const { camera } = useThree()
-  const mouseRef = useRef({ x: 0, y: 0 })
 
   const stages = [
     { label: 'Input', color: '#3cd0bd' },
@@ -16,23 +15,12 @@ function DataPipelineVisualization() {
     { label: 'Output', color: '#00b894' },
   ]
 
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      mouseRef.current.x = (event.clientX / window.innerWidth) * 2 - 1
-      mouseRef.current.y = -(event.clientY / window.innerHeight) * 2 + 1
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
-
   useFrame((state) => {
     if (sceneRef.current) {
-      sceneRef.current.rotation.y += 0.002
-      sceneRef.current.rotation.x = mouseRef.current.y * 0.3
+      sceneRef.current.rotation.y += 0.0015
+      sceneRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.15
     }
-
-    camera.position.z = 15 + Math.sin(state.clock.elapsedTime * 0.3) * 2 + (mouseRef.current.x * 3)
+    camera.position.z = 18
   })
 
   return (
@@ -110,23 +98,12 @@ function DataPipelineVisualization() {
 // 3D Neural Network Nodes
 function NeuralNetworkVisualization() {
   const groupRef = useRef<THREE.Group>(null)
-  const mouseRef = useRef({ x: 0, y: 0 })
-
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      mouseRef.current.x = (event.clientX / window.innerWidth) * 2 - 1
-      mouseRef.current.y = -(event.clientY / window.innerHeight) * 2 + 1
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.3 + (mouseRef.current.y * 0.3)
-      groupRef.current.rotation.y += 0.001 + (mouseRef.current.x * 0.001)
-      groupRef.current.rotation.z = mouseRef.current.x * 0.2
+      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.2
+      groupRef.current.rotation.y += 0.0008
+      groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.15) * 0.08
     }
   })
 
@@ -219,8 +196,21 @@ export function DataPipeline3D() {
     <div ref={ref} className="rounded-lg border border-[#3cd0bd]/20 bg-[#0a1118]/50 p-4 backdrop-blur-sm h-[300px] cursor-grab active:cursor-grabbing pointer-events-auto relative z-10">
       <div className="text-[#64748b] text-xs mb-2">3D Data Pipeline</div>
       {isVisible && (
-        <Canvas camera={{ position: [0, 0, 25], fov: 60 }}>
-          <OrbitControls enableZoom={false} enablePan={false} autoRotate={true} autoRotateSpeed={1.0} />
+        <Canvas
+          camera={{ position: [0, 0, 20], fov: 55 }}
+          dpr={[1, 1.5]}
+          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        >
+          <OrbitControls
+            enableZoom={false}
+            enablePan={false}
+            autoRotate
+            autoRotateSpeed={0.6}
+            enableDamping
+            dampingFactor={0.08}
+            maxPolarAngle={Math.PI / 1.6}
+            minPolarAngle={Math.PI / 3.5}
+          />
           <DataPipelineVisualization />
         </Canvas>
       )}
@@ -244,8 +234,21 @@ export function NeuralNetwork3D() {
     <div ref={ref} className="rounded-lg border border-[#3cd0bd]/20 bg-[#0a1118]/50 p-4 backdrop-blur-sm h-[300px] cursor-grab active:cursor-grabbing pointer-events-auto relative z-10">
       <div className="text-[#64748b] text-xs mb-2">3D Neural Network</div>
       {isVisible && (
-        <Canvas camera={{ position: [0, 0, 20], fov: 50 }}>
-          <OrbitControls enableZoom={false} enablePan={false} autoRotate={true} autoRotateSpeed={2.0} />
+        <Canvas
+          camera={{ position: [0, 0, 18], fov: 50 }}
+          dpr={[1, 1.5]}
+          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        >
+          <OrbitControls
+            enableZoom={false}
+            enablePan={false}
+            autoRotate
+            autoRotateSpeed={0.8}
+            enableDamping
+            dampingFactor={0.1}
+            maxPolarAngle={Math.PI / 1.6}
+            minPolarAngle={Math.PI / 3.5}
+          />
           <NeuralNetworkVisualization />
         </Canvas>
       )}
