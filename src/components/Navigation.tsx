@@ -76,6 +76,18 @@ export default function Navigation() {
                 {link.label}
               </a>
             ))}
+            {/* Drop resume.pdf in app/public/ to enable this link */}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-[#3cd0bd]/40 bg-[#3cd0bd]/10 px-4 py-2 text-sm font-medium text-[#3cd0bd] transition-all duration-300 hover:border-[#3cd0bd] hover:bg-[#3cd0bd]/20"
+            >
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+              </svg>
+              Resume
+            </a>
           </div>
 
           <button
@@ -117,6 +129,15 @@ export default function Navigation() {
                 {link.label}
               </a>
             ))}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsOpen(false)}
+              className="mt-2 rounded-lg border border-[#3cd0bd]/40 bg-[#3cd0bd]/10 px-4 py-3 text-sm font-medium text-[#3cd0bd] transition-colors hover:bg-[#3cd0bd]/20"
+            >
+              Resume ↓
+            </a>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { useReducedMotion } from '../hooks/use-reduced-motion'
 
 const floatingSkills = [
   'Python', 'LangChain', 'LangGraph', 'Azure ML', 'AWS',
@@ -13,8 +14,20 @@ export default function Hero() {
   const taglineRef = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
   const orbsRef = useRef<(HTMLDivElement | null)[]>([])
+  const reducedMotion = useReducedMotion()
 
   useEffect(() => {
+    if (reducedMotion) {
+      gsap.set(
+        [nameRef.current, subtitleRef.current, taglineRef.current, ctaRef.current],
+        { opacity: 1, y: 0 }
+      )
+      orbsRef.current.forEach((orb) => {
+        if (orb) gsap.set(orb, { opacity: 1, scale: 1 })
+      })
+      return
+    }
+
     const ctx = gsap.context(() => {
       // Initial states
       gsap.set([nameRef.current, subtitleRef.current, taglineRef.current], {
@@ -23,8 +36,8 @@ export default function Hero() {
       })
       gsap.set(ctaRef.current, { opacity: 0, y: 30 })
 
-      // Animation timeline
-      const tl = gsap.timeline({ delay: 0.5 })
+      // Faster than the original 0.5s so the first paint isn't a blank hero
+      const tl = gsap.timeline({ delay: 0.1 })
 
       tl.to(nameRef.current, {
         opacity: 1,
@@ -112,7 +125,7 @@ export default function Hero() {
     }, containerRef)
 
     return () => ctx.revert()
-  }, [])
+  }, [reducedMotion])
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id)

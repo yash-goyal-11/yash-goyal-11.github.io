@@ -1,9 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, lazy, Suspense } from 'react'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import ParticleBackground from './components/ParticleBackground'
 import CustomCursor from './components/CustomCursor'
 import Navigation from './components/Navigation'
 import Hero from './sections/Hero'
@@ -15,11 +14,15 @@ import Projects from './sections/Projects'
 import Publications from './sections/Publications'
 import HireTerminal from './sections/HireTerminal'
 import Contact from './sections/Contact'
+import { useReducedMotion } from './hooks/use-reduced-motion'
+
+const ParticleBackground = lazy(() => import('./components/ParticleBackground'))
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function App() {
   const lenisRef = useRef<Lenis | null>(null)
+  const reducedMotion = useReducedMotion()
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
@@ -32,21 +35,14 @@ export default function App() {
 
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
 
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
+    if (reducedMotion) return
 
-    if (prefersReducedMotion) return
-
-    // Initialize Lenis smooth scroll
     const lenis = new Lenis({
       lerp: 0.1,
       smoothWheel: true,
     })
     lenisRef.current = lenis
 
-    // Connect Lenis to GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update)
 
     gsap.ticker.add((time) => {
@@ -59,12 +55,16 @@ export default function App() {
       lenis.destroy()
       gsap.ticker.remove(lenis.raf as any)
     }
-  }, [])
+  }, [reducedMotion])
 
   return (
     <>
-      <CustomCursor />
-      <ParticleBackground />
+      {!reducedMotion && <CustomCursor />}
+      {!reducedMotion && (
+        <Suspense fallback={null}>
+          <ParticleBackground />
+        </Suspense>
+      )}
       <Navigation />
 
       <main className="relative">
