@@ -17,8 +17,7 @@ interface Project {
   paper?: string
 }
 
-// TODO: replace GITHUB_USER if your handle differs from LinkedIn
-const GITHUB_USER = 'yashgoyal11'
+const GITHUB_USER = 'yash1120'
 
 const projects: Project[] = [
   {
@@ -26,14 +25,42 @@ const projects: Project[] = [
     subtitle: 'AI-Powered Production Monitoring',
     description:
       'An autonomous AI system on Azure ML that continuously monitors live model performance, detects drift, and triggers retraining pipelines.',
-    tech: ['Python', 'Azure ML', 'LangChain', 'MLflow', 'FastAPI', 'Docker'],
+    tech: ['Python', 'Azure ML', 'LangGraph', 'MLflow', 'FastAPI', 'Docker'],
     image: '/project-1-bg.jpg',
     highlights: [
-      'Auto-detects data drift and concept drift',
-      'LLM-generated diagnostic reports',
-      'GitHub Actions CI/CD automation',
+      'ReAct agent investigates drift before triggering retraining',
+      'PSI + KS drift detection with F1/AUC monitoring',
+      'GitHub Actions CI/CD with agent-dispatched retraining',
     ],
-    github: `https://github.com/${GITHUB_USER}`,
+    github: `https://github.com/${GITHUB_USER}/MLmonitor`,
+  },
+  {
+    title: 'ASX-Grounded RAG Agent',
+    subtitle: 'Cited Q&A with Hallucination Eval',
+    description:
+      'A grounded Q&A agent over ASX continuous-disclosure announcements with hard citation enforcement, refusal on out-of-corpus questions, and a public hallucination-evaluation scoreboard.',
+    tech: ['Python', 'Claude', 'Qdrant', 'FastAPI', 'Next.js', 'Docker'],
+    image: '/project-2-bg.jpg',
+    highlights: [
+      'Hybrid BM25 + vector retrieval with RRF and BGE reranking',
+      'Regex citation verifier strips fabricated references',
+      'CI gate blocks PRs if hallucination rate worsens >2%',
+    ],
+    github: `https://github.com/${GITHUB_USER}/asx-grounded`,
+  },
+  {
+    title: 'Tradie Receptionist',
+    subtitle: 'AI Voice Agent for Tradespeople',
+    description:
+      'An AI phone receptionist for Australian tradies that answers calls, captures lead details, and texts the tradie within 30 seconds — built reliability-first with idempotency, retries, and structured logging.',
+    tech: ['TypeScript', 'Vapi', 'Twilio', 'Groq', 'Supabase', 'Fly.io'],
+    image: '/project-3-bg.jpg',
+    highlights: [
+      'Voice stack: Deepgram STT + ElevenLabs TTS + Llama 3.3 70B',
+      'HMAC-verified webhooks with event-dedup idempotency',
+      'Outbox pattern + exponential backoff for reliable SMS',
+    ],
+    github: `https://github.com/${GITHUB_USER}/tradie-receptionist`,
   },
   {
     title: 'Graph-QA Agent',
@@ -47,7 +74,6 @@ const projects: Project[] = [
       'Cypher query generation',
       'REST API with test coverage',
     ],
-    github: `https://github.com/${GITHUB_USER}`,
   },
   {
     title: 'Real-Time Traffic Analysis',
@@ -61,7 +87,6 @@ const projects: Project[] = [
       '~30% latency reduction',
       'ML congestion forecasting',
     ],
-    github: `https://github.com/${GITHUB_USER}`,
   },
   {
     title: 'AI Heart Disease Prediction',
@@ -75,7 +100,6 @@ const projects: Project[] = [
       'PCA + SMOTE for class balance',
       'Benchmarked against neural baseline',
     ],
-    github: `https://github.com/${GITHUB_USER}`,
   },
 ]
 

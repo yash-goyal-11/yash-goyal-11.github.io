@@ -24,16 +24,14 @@ const publications: Publication[] = [
     journal: 'Heliyon',
     description: 'Co-authored ML study on antiprotozoal peptide prediction and feature selection.',
     result: 'Achieved significant reduction in false-positive rates.',
-    // TODO: paste DOI URL (e.g. https://doi.org/10.1016/j.heliyon.xxxx)
-    doi: '',
+    doi: 'https://doi.org/10.1016/j.heliyon.2024.e36163',
   },
   {
     title: 'iIL13Pred: Improved Prediction of IL-13 Inducing Peptides',
     journal: 'BMC Bioinformatics',
     description: 'Improved peptide prediction model with stronger generalization.',
     result: '15% improvement in prediction accuracy over prior methods.',
-    // TODO: paste DOI URL (e.g. https://doi.org/10.1186/s12859-xxx)
-    doi: '',
+    doi: 'https://doi.org/10.1186/s12859-023-05248-6',
   },
 ]
 
