@@ -24,12 +24,16 @@ const publications: Publication[] = [
     journal: 'Heliyon',
     description: 'Co-authored ML study on antiprotozoal peptide prediction and feature selection.',
     result: 'Achieved significant reduction in false-positive rates.',
+    // TODO: paste DOI URL (e.g. https://doi.org/10.1016/j.heliyon.xxxx)
+    doi: '',
   },
   {
     title: 'iIL13Pred: Improved Prediction of IL-13 Inducing Peptides',
     journal: 'BMC Bioinformatics',
     description: 'Improved peptide prediction model with stronger generalization.',
     result: '15% improvement in prediction accuracy over prior methods.',
+    // TODO: paste DOI URL (e.g. https://doi.org/10.1186/s12859-xxx)
+    doi: '',
   },
 ]
 
@@ -151,6 +155,22 @@ export default function Publications() {
                   </svg>
                   {pub.result}
                 </div>
+
+                {pub.doi && (
+                  <div className="mt-5">
+                    <a
+                      href={pub.doi}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-[#e2e8f0] backdrop-blur-sm transition-all duration-300 hover:border-[#3cd0bd]/40 hover:bg-[#3cd0bd]/10 hover:text-[#3cd0bd]"
+                    >
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                      </svg>
+                      Read paper
+                    </a>
+                  </div>
+                )}
               </div>
             ))}
           </div>

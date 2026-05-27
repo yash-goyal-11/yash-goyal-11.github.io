@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts'
+import { useReducedMotion } from '../hooks/use-reduced-motion'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -107,18 +108,27 @@ export default function Skills() {
   const reactorRef = useRef<HTMLDivElement>(null)
   const [activeSectionId, setActiveSectionId] = useState('ai-ml')
   const activeSection = skillSections.find((section) => section.id === activeSectionId) ?? skillSections[0]
+  const reducedMotion = useReducedMotion()
   const [reactorBurst, setReactorBurst] = useState(0)
   const [reactorTilt, setReactorTilt] = useState({ x: 0, y: 0 })
   const [reactorMode, setReactorMode] = useState<'RESEARCH' | 'DEPLOY'>('RESEARCH')
   const [reactorSparks, setReactorSparks] = useState<Array<{ id: number; x: number; y: number }>>([])
-  const [reactorStats, setReactorStats] = useState([
+  const reactorStats = [
     { label: 'Agentic MLOps', value: '99.2%', note: 'Drift coverage' },
     { label: 'Graph-QA', value: '42k', note: 'Edges indexed' },
     { label: 'Realtime CV', value: '18ms', note: 'Median latency' },
     { label: 'Reliability', value: 'SLO 99.9', note: 'Uptime target' },
-  ])
+  ]
 
   useEffect(() => {
+    if (reducedMotion) {
+      gsap.set(headingRef.current, { opacity: 1, y: 0 })
+      cardRefs.current.forEach((card) => {
+        if (card) gsap.set(card, { opacity: 1, y: 0, rotateY: 0 })
+      })
+      return
+    }
+
     const ctx = gsap.context(() => {
       // Heading animation
       gsap.set(headingRef.current, { opacity: 0, y: 40 })
@@ -171,9 +181,10 @@ export default function Skills() {
     }, sectionRef)
 
     return () => ctx.revert()
-  }, [])
+  }, [reducedMotion])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
+    if (reducedMotion) return
     const card = cardRefs.current[index]
     if (!card) return
 
@@ -196,6 +207,7 @@ export default function Skills() {
   }
 
   const handleMouseLeave = (index: number) => {
+    if (reducedMotion) return
     const card = cardRefs.current[index]
     if (!card) return
 
@@ -209,6 +221,7 @@ export default function Skills() {
   }
 
   const handleReactorMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (reducedMotion) return
     const rect = event.currentTarget.getBoundingClientRect()
     const x = (event.clientX - rect.left) / rect.width - 0.5
     const y = (event.clientY - rect.top) / rect.height - 0.5
@@ -222,29 +235,8 @@ export default function Skills() {
   const triggerReactorBurst = () => {
     setReactorBurst((prev) => prev + 1)
     setReactorMode((prev) => (prev === 'RESEARCH' ? 'DEPLOY' : 'RESEARCH'))
-    setReactorStats([
-      {
-        label: 'Agentic MLOps',
-        value: `${(98.5 + Math.random() * 1.2).toFixed(2)}%`,
-        note: 'Drift coverage',
-      },
-      {
-        label: 'Graph-QA',
-        value: `${Math.floor(38000 + Math.random() * 9000)}k`,
-        note: 'Edges indexed',
-      },
-      {
-        label: 'Realtime CV',
-        value: `${Math.floor(12 + Math.random() * 12)}ms`,
-        note: 'Median latency',
-      },
-      {
-        label: 'Reliability',
-        value: `SLO ${(99.7 + Math.random() * 0.25).toFixed(2)}`,
-        note: 'Uptime target',
-      },
-    ])
 
+    // Visual sparks only — numbers stay stable so they read as real metrics
     const sparks = Array.from({ length: 12 }, (_, i) => ({
       id: Date.now() + i,
       x: 20 + Math.random() * 60,
@@ -483,7 +475,7 @@ export default function Skills() {
                   {[
                     'Signal: ACTIVE',
                     `Mode: ${reactorMode}`,
-                    `Bandwidth: ${(8.4 + Math.random() * 1.8).toFixed(1)}gb`,
+                    'Throughput: 9.2 gb/s',
                     `Agents: ${10 + (reactorBurst % 6)} live`,
                   ].map((line) => (
                     <div key={line} className="rounded-full border border-white/10 bg-white/5 px-3 py-2">

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useReducedMotion } from '../hooks/use-reduced-motion'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -63,15 +64,18 @@ function Starfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const scrollProgress = useRef(0)
   const velocity = useRef(0)
+  const reducedMotion = useReducedMotion()
 
   useEffect(() => {
+    if (reducedMotion) return
     const canvas = canvasRef.current
     if (!canvas) return
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    let animationId: number
+    let animationId: number | null = null
+    let isVisible = true
     let stars: { x: number; y: number; z: number; prevZ: number }[] = []
     const numStars = 800
 
@@ -105,6 +109,10 @@ function Starfield() {
     window.addEventListener('scroll', handleScroll, { passive: true })
 
     const draw = () => {
+      if (!isVisible) {
+        animationId = null
+        return
+      }
       const w = canvas.offsetWidth
       const h = canvas.offsetHeight
       const cx = w / 2
@@ -188,13 +196,38 @@ function Starfield() {
       },
     })
 
+    // Pause rAF loop when canvas is off-screen
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const wasVisible = isVisible
+          isVisible = entry.isIntersecting
+          if (isVisible && !wasVisible && animationId === null) {
+            draw()
+          }
+        }
+      },
+      { threshold: 0 }
+    )
+    io.observe(canvas)
+
     return () => {
-      cancelAnimationFrame(animationId)
+      if (animationId !== null) cancelAnimationFrame(animationId)
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleResize)
       st.kill()
+      io.disconnect()
     }
-  }, [])
+  }, [reducedMotion])
+
+  if (reducedMotion) {
+    return (
+      <div
+        className="absolute inset-0 w-full h-full bg-[radial-gradient(circle_at_center,rgba(28,63,58,0.25),transparent_70%)]"
+        style={{ zIndex: 0, backgroundColor: '#030507' }}
+      />
+    )
+  }
 
   return (
     <canvas
