@@ -288,8 +288,8 @@ export default function Projects() {
                 )}
               </div>
 
-              {/* Hover overlay */}
-              <div className="absolute inset-0 border-2 border-transparent transition-all duration-500 group-hover:border-[#3cd0bd]/20 rounded-3xl" />
+              {/* Hover overlay (decorative only — must not intercept clicks) */}
+              <div className="pointer-events-none absolute inset-0 border-2 border-transparent transition-all duration-500 group-hover:border-[#3cd0bd]/20 rounded-3xl" />
             </div>
           ))}
         </div>
