@@ -1,4 +1,4 @@
-import{j as e,C as h,r as n,u as w,V as x,a as z,A as g}from"./index-CIRrkZiA.js";const a=4e3,b=`
+import{j as e,C as h,r as n,u as w,V as x,a as z,A as g}from"./index-C5GKetIe.js";const a=4e3,b=`
   attribute float size;
   attribute float opacity;
   attribute vec3 random;
