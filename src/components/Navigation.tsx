@@ -16,6 +16,7 @@ export default function Navigation() {
   const navRef = useRef<HTMLElement>(null)
   const [isVisible, setIsVisible] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('')
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +25,27 @@ export default function Navigation() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const sections = navLinks
+      .map((link) => document.querySelector(link.href))
+      .filter((el): el is Element => el !== null)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(`#${entry.target.id}`)
+          }
+        }
+      },
+      // A section is "active" when it occupies the middle band of the viewport
+      { rootMargin: '-40% 0px -50% 0px' }
+    )
+
+    sections.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
   }, [])
 
   useEffect(() => {
@@ -71,11 +93,23 @@ export default function Navigation() {
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleClick(e, link.href)}
-                className="rounded-full px-4 py-2 text-sm text-[#94a3b8] transition-all duration-300 hover:bg-white/5 hover:text-white"
+                className={`rounded-full px-4 py-2 text-sm transition-all duration-300 ${
+                  activeSection === link.href
+                    ? 'bg-[#3cd0bd]/10 text-[#3cd0bd]'
+                    : 'text-[#94a3b8] hover:bg-white/5 hover:text-white'
+                }`}
               >
                 {link.label}
               </a>
             ))}
+            <button
+              onClick={() => window.dispatchEvent(new Event('open-cmdk'))}
+              className="ml-1 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs text-[#94a3b8] transition-all duration-300 hover:border-[#3cd0bd]/40 hover:text-white"
+              aria-label="Open command palette"
+              title="Command palette (Ctrl+K)"
+            >
+              <kbd className="font-mono text-[10px] text-[#3cd0bd]">⌘K</kbd>
+            </button>
             {/* Drop resume.pdf in app/public/ to enable this link */}
             <a
               href="/resume.pdf"

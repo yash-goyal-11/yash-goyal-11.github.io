@@ -1,8 +1,36 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
+
+function SydneyClock() {
+  const [time, setTime] = useState('')
+
+  useEffect(() => {
+    const update = () => {
+      setTime(
+        new Intl.DateTimeFormat('en-AU', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+          timeZone: 'Australia/Sydney',
+          timeZoneName: 'short', // AEST/AEDT switches with daylight saving
+        }).format(new Date())
+      )
+    }
+    update()
+    const id = setInterval(update, 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  return (
+    <span className="font-mono text-[#3cd0bd]" suppressHydrationWarning>
+      {time}
+    </span>
+  )
+}
 
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -143,11 +171,19 @@ export default function Contact() {
       </div>
 
       {/* Footer */}
-      <footer className="absolute bottom-8 left-0 right-0 text-center">
-        <p className="text-xs text-[#64748b]">
-          &copy; {new Date().getFullYear()} Yash Goyal. Crafted with
-          passion & precision.
-        </p>
+      <footer className="absolute bottom-8 left-0 right-0 px-4">
+        <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-2 text-xs text-[#64748b] sm:flex-row">
+          <p>
+            &copy; {new Date().getFullYear()} Yash Goyal · Built with React, Three.js &amp; GSAP
+          </p>
+          <p className="flex items-center gap-2">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00b894] opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#00b894]" />
+            </span>
+            Sydney <SydneyClock />
+          </p>
+        </div>
       </footer>
     </section>
   )

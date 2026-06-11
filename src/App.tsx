@@ -5,6 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import CustomCursor from './components/CustomCursor'
 import Navigation from './components/Navigation'
+import ScrollProgress from './components/ScrollProgress'
+import CommandPalette from './components/CommandPalette'
 import Hero from './sections/Hero'
 import About from './sections/About'
 import Skills from './sections/Skills'
@@ -65,6 +67,9 @@ export default function App() {
           <ParticleBackground />
         </Suspense>
       )}
+      <div className="noise-overlay" aria-hidden="true" />
+      <ScrollProgress />
+      <CommandPalette />
       <Navigation />
 
       <main className="relative">

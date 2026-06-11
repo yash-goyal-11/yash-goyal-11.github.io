@@ -1,17 +1,78 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useReducedMotion } from '../hooks/use-reduced-motion'
+import ScrambleText from '../components/ScrambleText'
 
 const floatingSkills = [
   'Python', 'LangChain', 'LangGraph', 'Azure ML', 'AWS',
   'Docker', 'Kubernetes', 'MLflow', 'Neo4j',
 ]
 
+const roles = [
+  'LLM-Powered Agents',
+  'Knowledge-Graph QA Systems',
+  'GPU-Accelerated ML Pipelines',
+  'Production MLOps Platforms',
+]
+
+function RoleRotator({ reducedMotion }: { reducedMotion: boolean }) {
+  const [index, setIndex] = useState(0)
+  const [display, setDisplay] = useState(reducedMotion ? roles[0] : '')
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setDisplay(roles[0])
+      return
+    }
+
+    let timeout: ReturnType<typeof setTimeout>
+    let char = 0
+    let deleting = false
+
+    const step = () => {
+      const word = roles[index]
+
+      if (!deleting) {
+        char++
+        setDisplay(word.slice(0, char))
+        if (char === word.length) {
+          deleting = true
+          timeout = setTimeout(step, 2200) // hold the full word
+          return
+        }
+        timeout = setTimeout(step, 50)
+      } else {
+        char--
+        setDisplay(word.slice(0, char))
+        if (char === 0) {
+          setIndex((i) => (i + 1) % roles.length)
+          return
+        }
+        timeout = setTimeout(step, 25)
+      }
+    }
+
+    timeout = setTimeout(step, 300)
+    return () => clearTimeout(timeout)
+  }, [index, reducedMotion])
+
+  return (
+    <span className="text-[#3cd0bd]">
+      {display}
+      {!reducedMotion && (
+        <span className="ml-0.5 inline-block w-[2px] animate-caret-blink bg-[#3cd0bd]">
+          &nbsp;
+        </span>
+      )}
+    </span>
+  )
+}
+
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const nameRef = useRef<HTMLHeadingElement>(null)
   const subtitleRef = useRef<HTMLParagraphElement>(null)
-  const taglineRef = useRef<HTMLParagraphElement>(null)
+  const rolesRef = useRef<HTMLParagraphElement>(null)
+  const taglineRef = useRef<HTMLDivElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
   const orbsRef = useRef<(HTMLDivElement | null)[]>([])
   const reducedMotion = useReducedMotion()
@@ -19,7 +80,7 @@ export default function Hero() {
   useEffect(() => {
     if (reducedMotion) {
       gsap.set(
-        [nameRef.current, subtitleRef.current, taglineRef.current, ctaRef.current],
+        [subtitleRef.current, rolesRef.current, taglineRef.current, ctaRef.current],
         { opacity: 1, y: 0 }
       )
       orbsRef.current.forEach((orb) => {
@@ -29,68 +90,41 @@ export default function Hero() {
     }
 
     const ctx = gsap.context(() => {
-      // Initial states
-      gsap.set([nameRef.current, subtitleRef.current, taglineRef.current], {
+      gsap.set([subtitleRef.current, rolesRef.current, taglineRef.current], {
         opacity: 0,
         y: 60,
       })
       gsap.set(ctaRef.current, { opacity: 0, y: 30 })
 
-      // Faster than the original 0.5s so the first paint isn't a blank hero
       const tl = gsap.timeline({ delay: 0.1 })
 
-      tl.to(nameRef.current, {
+      tl.to(taglineRef.current, {
         opacity: 1,
         y: 0,
-        duration: 1.2,
+        duration: 1,
         ease: 'power3.out',
       })
         .to(
           subtitleRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power3.out',
-          },
+          { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
           '-=0.6'
         )
         .to(
-          taglineRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power3.out',
-          },
+          rolesRef.current,
+          { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
           '-=0.6'
         )
         .to(
           ctaRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-          },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
           '-=0.4'
         )
-
-      // Continuous glow pulse
-      gsap.to(nameRef.current, {
-        textShadow: '0 0 30px rgba(60, 208, 189, 0.6), 0 0 60px rgba(60, 208, 189, 0.2)',
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      })
 
       // Floating orbs animation
       orbsRef.current.forEach((orb, i) => {
         if (!orb) return
         gsap.set(orb, { opacity: 0, scale: 0 })
-        
-        // Staggered entrance
+
         gsap.to(orb, {
           opacity: 1,
           scale: 1,
@@ -99,7 +133,6 @@ export default function Hero() {
           ease: 'back.out(2)',
         })
 
-        // Floating animation - each orb moves in a unique path
         const duration = 4 + Math.random() * 3
         const xMove = (Math.random() - 0.5) * 40
         const yMove = (Math.random() - 0.5) * 30
@@ -114,7 +147,6 @@ export default function Hero() {
           delay: Math.random() * 2,
         })
 
-        // Subtle rotation
         gsap.to(orb, {
           rotation: 360,
           duration: 20 + Math.random() * 10,
@@ -137,11 +169,13 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4"
+      className="relative z-10 flex min-h-screen flex-col items-center justify-center overflow-hidden px-4"
     >
+      {/* Perspective grid floor */}
+      <div className="grid-floor pointer-events-none absolute inset-x-0 bottom-0 h-[45vh]" />
+
       {/* Floating skill orbs */}
       {floatingSkills.map((skill, i) => {
-        // Position orbs in a semi-circle around the hero
         const angle = (i / floatingSkills.length) * Math.PI * 2
         const radius = 35 // vw
         const x = Math.cos(angle) * radius
@@ -167,35 +201,54 @@ export default function Hero() {
       })}
 
       <div className="text-center">
-        <p
+        <div
           ref={taglineRef}
-          className="mb-4 text-sm font-medium tracking-[0.3em] text-[#3cd0bd] uppercase opacity-0"
+          className="mb-6 flex flex-col items-center gap-3 opacity-0"
         >
-          Sydney, Australia
-        </p>
+          {/* Availability badge — the first thing a recruiter scans for */}
+          <span className="glass-card inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium tracking-wider text-[#e2e8f0]">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00b894] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00b894]" />
+            </span>
+            OPEN TO ML / MLOPS ROLES
+          </span>
+          <p className="text-sm font-medium tracking-[0.3em] text-[#3cd0bd] uppercase">
+            Sydney, Australia
+          </p>
+        </div>
 
-        <h1
-          ref={nameRef}
-          className="font-display text-stroke mb-2 opacity-0"
+        <ScrambleText
+          as="h1"
+          text="YASH GOYAL"
+          delay={300}
+          speed={90}
+          className="font-display text-stroke glow-teal mb-2 whitespace-nowrap"
           style={{
-            fontSize: 'clamp(4rem, 12vw, 10rem)',
+            fontSize: 'clamp(3rem, 12vw, 10rem)',
             fontWeight: 700,
             letterSpacing: '-0.02em',
             lineHeight: 1.1,
           }}
-        >
-          YASH GOYAL
-        </h1>
+        />
 
         <p
           ref={subtitleRef}
           className="mt-6 text-lg font-light tracking-[0.2em] text-[#e2e8f0] opacity-0 md:text-xl"
           style={{ fontFamily: 'Inter, sans-serif' }}
         >
-          PRODUCTION ML ENGINEER & DATA SCIENTIST
+          PRODUCTION ML ENGINEER &amp; DATA SCIENTIST
         </p>
 
-        <div ref={ctaRef} className="mt-12 flex justify-center gap-6 opacity-0">
+        <p
+          ref={rolesRef}
+          className="mt-4 h-7 font-mono text-sm tracking-wider text-[#94a3b8] opacity-0 md:text-base"
+        >
+          <span className="text-[#64748b]">I build </span>
+          <RoleRotator reducedMotion={reducedMotion} />
+        </p>
+
+        <div ref={ctaRef} className="mt-12 flex flex-wrap justify-center gap-4 opacity-0 sm:gap-6">
           <button
             onClick={() => scrollToSection('about')}
             className="group relative overflow-hidden rounded-full border border-[#3cd0bd]/30 bg-transparent px-8 py-3 text-sm font-medium tracking-wider text-[#3cd0bd] transition-all duration-300 hover:border-[#3cd0bd] hover:shadow-[0_0_20px_rgba(60,208,189,0.3)]"
@@ -209,6 +262,16 @@ export default function Hero() {
           >
             <span className="relative z-10">GET IN TOUCH</span>
           </a>
+          <button
+            onClick={() => window.dispatchEvent(new Event('open-cmdk'))}
+            className="group hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-[#94a3b8] transition-all duration-300 hover:border-[#3cd0bd]/40 hover:text-[#e2e8f0] md:inline-flex"
+            aria-label="Open command palette"
+          >
+            <kbd className="rounded border border-white/15 bg-white/5 px-1.5 py-0.5 font-mono text-[10px] text-[#3cd0bd]">
+              ⌘K
+            </kbd>
+            COMMAND
+          </button>
         </div>
       </div>
 
