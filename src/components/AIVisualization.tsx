@@ -76,7 +76,7 @@ export function ModelVisualization() {
 
   return (
     <div className="rounded-lg border border-[#3cd0bd]/20 bg-[#0a1118]/50 p-4 backdrop-blur-sm">
-      <div className="text-[#64748b] text-xs mb-3">Neural Network Visualization</div>
+      <div className="text-[#8b98ad] text-xs mb-3">Neural Network Visualization</div>
       <canvas
         ref={canvasRef}
         className="w-full"
@@ -89,7 +89,7 @@ export function ModelVisualization() {
 export function DataFlowAnimation() {
   return (
     <div className="space-y-2 rounded-lg border border-[#3cd0bd]/20 bg-[#0a1118]/50 p-4 backdrop-blur-sm">
-      <div className="text-[#64748b] text-xs mb-3">Data Pipeline Flow</div>
+      <div className="text-[#8b98ad] text-xs mb-3">Data Pipeline Flow</div>
       <div className="space-y-2">
         {[
           { label: 'Data Ingestion', icon: '📥' },
@@ -108,7 +108,7 @@ export function DataFlowAnimation() {
           >
             <span>{step.icon}</span>
             <div className="flex-1 h-1 bg-gradient-to-r from-[#3cd0bd] to-transparent rounded-full" />
-            <span className="text-[#64748b] text-xs">{step.label}</span>
+            <span className="text-[#8b98ad] text-xs">{step.label}</span>
           </div>
         ))}
       </div>

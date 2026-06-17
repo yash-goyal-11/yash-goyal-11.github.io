@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from 'recharts'
 import { useReducedMotion } from '../hooks/use-reduced-motion'
+import SectionLabel from '../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -105,20 +106,9 @@ export default function Skills() {
   const headingRef = useRef<HTMLHeadingElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
-  const reactorRef = useRef<HTMLDivElement>(null)
   const [activeSectionId, setActiveSectionId] = useState('ai-ml')
   const activeSection = skillSections.find((section) => section.id === activeSectionId) ?? skillSections[0]
   const reducedMotion = useReducedMotion()
-  const [reactorBurst, setReactorBurst] = useState(0)
-  const [reactorTilt, setReactorTilt] = useState({ x: 0, y: 0 })
-  const [reactorMode, setReactorMode] = useState<'RESEARCH' | 'DEPLOY'>('RESEARCH')
-  const [reactorSparks, setReactorSparks] = useState<Array<{ id: number; x: number; y: number }>>([])
-  const reactorStats = [
-    { label: 'Agentic MLOps', value: '99.2%', note: 'Drift coverage' },
-    { label: 'Graph-QA', value: '42k', note: 'Edges indexed' },
-    { label: 'Realtime CV', value: '18ms', note: 'Median latency' },
-    { label: 'Reliability', value: 'SLO 99.9', note: 'Uptime target' },
-  ]
 
   useEffect(() => {
     if (reducedMotion) {
@@ -220,32 +210,6 @@ export default function Skills() {
     })
   }
 
-  const handleReactorMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (reducedMotion) return
-    const rect = event.currentTarget.getBoundingClientRect()
-    const x = (event.clientX - rect.left) / rect.width - 0.5
-    const y = (event.clientY - rect.top) / rect.height - 0.5
-    setReactorTilt({ x: x * 12, y: y * -12 })
-  }
-
-  const handleReactorLeave = () => {
-    setReactorTilt({ x: 0, y: 0 })
-  }
-
-  const triggerReactorBurst = () => {
-    setReactorBurst((prev) => prev + 1)
-    setReactorMode((prev) => (prev === 'RESEARCH' ? 'DEPLOY' : 'RESEARCH'))
-
-    // Visual sparks only — numbers stay stable so they read as real metrics
-    const sparks = Array.from({ length: 12 }, (_, i) => ({
-      id: Date.now() + i,
-      x: 20 + Math.random() * 60,
-      y: 20 + Math.random() * 60,
-    }))
-    setReactorSparks(sparks)
-    window.setTimeout(() => setReactorSparks([]), 900)
-  }
-
   const renderRadarTick = (props: { x: number; y: number; payload: { value: string } }) => {
     const { x, y, payload } = props
     const sectionId = categorySectionMap[payload.value]
@@ -275,13 +239,14 @@ export default function Skills() {
       className="relative z-10 px-4 py-32 md:py-48"
     >
       <div className="mx-auto max-w-6xl">
+        <SectionLabel>Skills</SectionLabel>
         <h2
           ref={headingRef}
           className="font-display mb-4 text-center text-4xl font-bold text-white md:text-5xl opacity-0"
         >
           The <span className="text-[#3cd0bd]">Skill</span> Matrix
         </h2>
-        <p className="mb-12 text-center text-[#64748b]">
+        <p className="mb-12 text-center text-[#8b98ad]">
           Core technologies powering my production ML and GenAI systems
         </p>
 
@@ -350,7 +315,7 @@ export default function Skills() {
                   <PolarRadiusAxis
                     angle={30}
                     domain={[0, 100]}
-                    tick={{ fill: '#64748b', fontSize: 10 }}
+                    tick={{ fill: '#8b98ad', fontSize: 10 }}
                   />
                   <Radar
                     dataKey="score"
@@ -370,7 +335,7 @@ export default function Skills() {
                 </RadarChart>
               </ResponsiveContainer>
             </div>
-            <p className="mt-4 text-xs text-[#64748b]">
+            <p className="mt-4 text-xs text-[#8b98ad]">
               Strengths reflect production experience, research output, and shipping velocity.
             </p>
           </div>
@@ -400,188 +365,7 @@ export default function Skills() {
           </div>
         </div>
 
-        <div className="mt-20 pt-12 border-t border-white/5">
-          <h3 className="mb-8 text-center text-2xl font-bold text-white">
-            <span className="text-[#3cd0bd]">Signal</span> Reactor
-          </h3>
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.1fr_1.2fr]">
-            <div className="glass-card relative overflow-hidden rounded-3xl border border-white/10 p-8">
-              <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[#3cd0bd]/10 blur-3xl" />
-              <div className="absolute -left-32 bottom-0 h-64 w-64 rounded-full bg-[#00b894]/10 blur-3xl" />
-              <div className="relative z-10 space-y-6">
-                <div>
-                  <div className="text-xs font-medium uppercase tracking-[0.3em] text-[#3cd0bd]">
-                    Live Signal Feed
-                  </div>
-                  <h4 className="mt-2 text-2xl font-semibold text-white">AI Systems in Orbit</h4>
-                  <p className="mt-3 text-sm text-[#94a3b8]">
-                    A kinetic control room that tracks the systems I ship: agentic monitoring,
-                    knowledge graphs, and real-time inference loops.
-                  </p>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {reactorStats.map((item) => (
-                    <div key={item.label} className="rounded-2xl border border-white/10 bg-[#0a1118]/60 p-4">
-                      <div className="text-xs uppercase tracking-wider text-[#64748b]">{item.label}</div>
-                      <div className="mt-2 text-2xl font-semibold text-white">{item.value}</div>
-                      <div className="mt-1 text-xs text-[#3cd0bd]">{item.note}</div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-wrap gap-2 text-xs text-[#94a3b8]">
-                  {['Azure ML', 'LangGraph', 'Neo4j', 'MLflow', 'GPU Pipelines', 'FastAPI'].map((tag) => (
-                    <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div
-              ref={reactorRef}
-              onMouseMove={handleReactorMove}
-              onMouseLeave={handleReactorLeave}
-              onClick={triggerReactorBurst}
-              className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a1118]/70 p-8 cursor-pointer"
-              style={{
-                transform: `perspective(1000px) rotateX(${reactorTilt.y}deg) rotateY(${reactorTilt.x}deg)`,
-                transition: 'transform 0.2s ease-out',
-              }}
-              data-burst={reactorBurst}
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(60,208,189,0.12),transparent_65%)]" />
-              <div className="relative z-10 flex h-full flex-col items-center justify-center">
-                <div className="relative h-72 w-72">
-                  {['ring-a', 'ring-b', 'ring-c'].map((ring) => (
-                    <div key={ring} className={`absolute inset-0 rounded-full border border-[#3cd0bd]/30 ${ring}`} />
-                  ))}
-                  <div className="absolute inset-10 rounded-full border border-[#00b894]/30 ring-orbit" />
-                  <div className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3cd0bd]/20 blur-sm core-glow" />
-                  <div className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3cd0bd] shadow-[0_0_25px_rgba(60,208,189,0.8)] core-core" />
-                  <div className="absolute inset-0 rounded-full border border-[#3cd0bd]/30 burst-ring" />
-                  {reactorSparks.map((spark) => (
-                    <div
-                      key={spark.id}
-                      className="absolute h-1.5 w-1.5 rounded-full bg-[#3cd0bd] spark"
-                      style={{ left: `${spark.x}%`, top: `${spark.y}%` }}
-                    />
-                  ))}
-                </div>
-
-                <div className="mt-8 grid grid-cols-2 gap-4 text-center text-xs text-[#94a3b8]">
-                  {[
-                    'Signal: ACTIVE',
-                    `Mode: ${reactorMode}`,
-                    'Throughput: 9.2 gb/s',
-                    `Agents: ${10 + (reactorBurst % 6)} live`,
-                  ].map((line) => (
-                    <div key={line} className="rounded-full border border-white/10 bg-white/5 px-3 py-2">
-                      {line}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {[
-                { text: 'Agentic Loop', style: 'top-10 left-8' },
-                { text: 'Graph-QA', style: 'top-20 right-10' },
-                { text: 'RAG Core', style: 'bottom-24 left-10' },
-                { text: 'Realtime', style: 'bottom-16 right-8' },
-              ].map((item, index) => (
-                <div
-                  key={item.text}
-                  className={`absolute ${item.style} rounded-full border border-[#3cd0bd]/30 bg-[#030507]/70 px-3 py-1 text-xs text-[#3cd0bd] shadow-[0_0_12px_rgba(60,208,189,0.25)] float-tag-${index}`}
-                >
-                  {item.text}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
-
-      <style>{`
-        @keyframes skill-stream {
-          0% { transform: translateX(-60%); opacity: 0.6; }
-          50% { opacity: 1; }
-          100% { transform: translateX(160%); opacity: 0.6; }
-        }
-        .animate-skill-stream {
-          animation: skill-stream 3.5s ease-in-out infinite;
-        }
-        .ring-a {
-          animation: spin-slow 18s linear infinite;
-        }
-        .ring-b {
-          inset: 18px;
-          border-style: dashed;
-          animation: spin-reverse 22s linear infinite;
-        }
-        .ring-c {
-          inset: 36px;
-          animation: spin-slow 26s linear infinite;
-        }
-        .ring-orbit {
-          animation: pulse-orbit 4s ease-in-out infinite;
-        }
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes spin-reverse {
-          from { transform: rotate(360deg); }
-          to { transform: rotate(0deg); }
-        }
-        @keyframes pulse-orbit {
-          0%, 100% { opacity: 0.4; transform: scale(0.98); }
-          50% { opacity: 0.9; transform: scale(1.02); }
-        }
-        .burst-ring {
-          opacity: 0;
-        }
-        [data-burst] .burst-ring {
-          animation: burst 1.2s ease-out forwards;
-        }
-        @keyframes burst {
-          0% { opacity: 0.7; transform: scale(0.6); }
-          60% { opacity: 0.4; }
-          100% { opacity: 0; transform: scale(1.4); }
-        }
-        .core-glow {
-          animation: core-pulse 3s ease-in-out infinite;
-        }
-        .core-core {
-          animation: core-flicker 2.4s ease-in-out infinite;
-        }
-        .spark {
-          animation: spark 0.9s ease-out forwards;
-        }
-        @keyframes spark {
-          0% { transform: scale(0.6); opacity: 0.6; }
-          70% { transform: scale(1.6); opacity: 1; }
-          100% { transform: scale(0.2); opacity: 0; }
-        }
-        @keyframes core-pulse {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-          50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-        }
-        @keyframes core-flicker {
-          0%, 100% { opacity: 0.9; }
-          50% { opacity: 0.6; }
-        }
-        ${[0, 1, 2, 3].map((i) => `
-          .float-tag-${i} {
-            animation: float-tag 4.${i + 1}s ease-in-out infinite;
-          }
-        `).join('')}
-        @keyframes float-tag {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-      `}</style>
     </section>
   )
 }

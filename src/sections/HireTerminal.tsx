@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { TokenStreamAnimation, AgentThinkingAnimation, NeuralNetworkPulse } from '../components/LLMAnimation'
+import SectionLabel from '../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -64,7 +65,7 @@ const AVAILABLE_COMMANDS: Record<string, Command> = {
       '   → Knowledge graph construction, entity extraction, Cypher',
       '',
       '5. Real-Time Traffic Analysis',
-      '   → 95% detection accuracy, 30% latency reduction, AWS',
+      '   → Vehicle detection (CV), ~25% latency reduction, AWS',
       '',
       '6. AI Heart Disease Prediction',
       '   → 90%+ accuracy, PCA/SMOTE, ensemble models',
@@ -87,7 +88,7 @@ const AVAILABLE_COMMANDS: Record<string, Command> = {
       '  Aug 2025 - Present | OOP (INFO1113)',
       '',
       'Software Eng Intern - ITS Lab, IIT Madras',
-      '  Oct 2023 - Feb 2024 | -25% latency, +30% engagement',
+      '  Oct 2023 - Feb 2024 | CV pipeline, ~25% latency reduction',
     ],
   },
   education: {
@@ -128,7 +129,7 @@ const AVAILABLE_COMMANDS: Record<string, Command> = {
       '┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┓',
       '┃  SYSTEM: Candidate profile loaded              ┃',
       '┃  STATUS: Available for full-time roles         ┃',
-      '┃  MATCH:  99.7% fit for ML/Data roles           ┃',
+      '┃  FOCUS:  ML / MLOps · GenAI · Data Science     ┃',
       '┣━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━┛',
       '',
       '✅ GPU-accelerated ML pipelines: VERIFIED',
@@ -245,10 +246,11 @@ export default function HireTerminal() {
       className="relative z-10 px-4 py-32 md:py-48"
     >
       <div className="mx-auto max-w-4xl">
+        <SectionLabel>Terminal</SectionLabel>
         <h2 className="font-display mb-4 text-center text-4xl font-bold text-white md:text-5xl">
           Try the <span className="text-[#3cd0bd]">Terminal</span>
         </h2>
-        <p className="mb-12 text-center text-[#64748b]">
+        <p className="mb-12 text-center text-[#8b98ad]">
           Type commands to explore my skills, or just type{" "}
           <span className="rounded bg-[#1c3f3a]/50 px-2 py-0.5 font-mono text-[#3cd0bd]">
             hire
@@ -266,7 +268,7 @@ export default function HireTerminal() {
             <div className="h-3 w-3 rounded-full bg-red-500/80" />
             <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
             <div className="h-3 w-3 rounded-full bg-green-500/80" />
-            <span className="ml-4 text-xs text-[#64748b] font-mono">
+            <span className="ml-4 text-xs text-[#8b98ad] font-mono">
               yash@portfolio — zsh — 80x24
             </span>
           </div>
@@ -316,19 +318,16 @@ export default function HireTerminal() {
                 type="text"
                 value={currentInput}
                 onChange={(e) => setCurrentInput(e.target.value)}
-                className="flex-1 bg-transparent text-white outline-none font-mono"
+                className="flex-1 rounded-sm bg-transparent font-mono text-white outline-none focus-visible:ring-1 focus-visible:ring-[#3cd0bd]/60"
                 placeholder=""
                 autoFocus
                 spellCheck={false}
+                aria-label="Terminal command input"
               />
             </form>
             <div className="h-4" />
           </div>
 
-          {/* Blinking cursor overlay */}
-          <div className="pointer-events-none absolute bottom-4 right-4 text-xs text-[#64748b]">
-            Cursor blinking...
-          </div>
         </div>
 
         {/* Quick command buttons */}

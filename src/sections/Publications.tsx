@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import SectionLabel from '../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -108,11 +109,12 @@ export default function Publications() {
     <section
       id="publications"
       ref={sectionRef}
-      className="relative z-10 px-4 py-8 md:py-12"
+      className="relative z-10 px-4 py-32 md:py-48"
     >
       <div className="mx-auto max-w-6xl">
         {/* Publications */}
         <div className="mb-24">
+          <SectionLabel>Research</SectionLabel>
           <h2 className="font-display mb-12 text-center text-4xl font-bold text-white md:text-5xl">
             <span className="text-[#3cd0bd]">Research</span> & Publications
           </h2>
@@ -214,7 +216,7 @@ export default function Publications() {
                   {award.title}
                 </h3>
 
-                <p className="mt-2 text-xs text-[#64748b]">{award.description}</p>
+                <p className="mt-2 text-xs text-[#8b98ad]">{award.description}</p>
               </div>
             ))}
           </div>

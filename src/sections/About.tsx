@@ -2,6 +2,7 @@ import { useEffect, useRef, lazy, Suspense } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useReducedMotion } from '../hooks/use-reduced-motion'
+import SectionLabel from '../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -92,6 +93,7 @@ export default function About() {
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
           {/* Left: Text */}
           <div className="order-2 lg:order-1">
+            <SectionLabel centered={false}>About</SectionLabel>
             <h2
               ref={headingRef}
               className="font-display mb-8 text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl opacity-0"
@@ -126,7 +128,7 @@ export default function About() {
                   <div className="font-display text-3xl font-bold text-[#3cd0bd]">
                     {stat.value}
                   </div>
-                  <div className="mt-1 text-xs tracking-wider text-[#64748b] uppercase">
+                  <div className="mt-1 text-xs tracking-wider text-[#8b98ad] uppercase">
                     {stat.label}
                   </div>
                 </div>

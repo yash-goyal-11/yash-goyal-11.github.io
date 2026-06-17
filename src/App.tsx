@@ -18,7 +18,7 @@ import HireTerminal from './sections/HireTerminal'
 import Contact from './sections/Contact'
 import { useReducedMotion } from './hooks/use-reduced-motion'
 
-const ParticleBackground = lazy(() => import('./components/ParticleBackground'))
+const AuroraBackground = lazy(() => import('./components/AuroraBackground'))
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -62,11 +62,9 @@ export default function App() {
   return (
     <>
       {!reducedMotion && <CustomCursor />}
-      {!reducedMotion && (
-        <Suspense fallback={null}>
-          <ParticleBackground />
-        </Suspense>
-      )}
+      <Suspense fallback={null}>
+        <AuroraBackground />
+      </Suspense>
       <div className="noise-overlay" aria-hidden="true" />
       <ScrollProgress />
       <CommandPalette />

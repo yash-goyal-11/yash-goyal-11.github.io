@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useReducedMotion } from '../hooks/use-reduced-motion'
+import SectionLabel from '../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -274,6 +275,7 @@ export default function Experience() {
       <Starfield />
 
       <div className="relative z-10 mx-auto max-w-5xl px-4">
+        <SectionLabel>Experience</SectionLabel>
         <h2 className="font-display mb-16 text-center text-4xl font-bold text-white md:text-5xl">
           Work <span className="text-[#3cd0bd]">Experience</span>
         </h2>

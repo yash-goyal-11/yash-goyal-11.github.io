@@ -178,15 +178,15 @@ export default function CommandPalette() {
             <Command.Input
               autoFocus
               placeholder="Type a command or search…"
-              className="h-14 w-full bg-transparent text-sm text-[#e2e8f0] outline-none placeholder:text-[#64748b]"
+              className="h-14 w-full bg-transparent text-sm text-[#e2e8f0] outline-none placeholder:text-[#8b98ad]"
             />
-            <kbd className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[10px] tracking-wider text-[#64748b]">
+            <kbd className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[10px] tracking-wider text-[#8b98ad]">
               ESC
             </kbd>
           </div>
 
           <Command.List className="max-h-[320px] overflow-y-auto p-2" data-lenis-prevent>
-            <Command.Empty className="py-8 text-center text-sm text-[#64748b]">
+            <Command.Empty className="py-8 text-center text-sm text-[#8b98ad]">
               No results. Try “projects” or “resume”.
             </Command.Empty>
 
@@ -218,7 +218,7 @@ export default function CommandPalette() {
             </Command.Group>
           </Command.List>
 
-          <div className="flex items-center justify-between border-t border-white/5 px-4 py-2.5 text-[10px] tracking-wider text-[#64748b]">
+          <div className="flex items-center justify-between border-t border-white/5 px-4 py-2.5 text-[10px] tracking-wider text-[#8b98ad]">
             <span className="flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#3cd0bd]" />
               YASH.OS v2.0
@@ -236,7 +236,7 @@ function PaletteRow({ item }: { item: PaletteAction }) {
     <Command.Item
       value={item.label}
       onSelect={item.run}
-      className="group flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-[#94a3b8] transition-colors data-[selected=true]:bg-[#3cd0bd]/10 data-[selected=true]:text-[#e2e8f0] [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-[#64748b] data-[selected=true]:[&_svg]:text-[#3cd0bd]"
+      className="group flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-[#94a3b8] transition-colors data-[selected=true]:bg-[#3cd0bd]/10 data-[selected=true]:text-[#e2e8f0] [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-[#8b98ad] data-[selected=true]:[&_svg]:text-[#3cd0bd]"
     >
       {item.icon}
       <span>{item.label}</span>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import SectionLabel from '../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -129,6 +130,7 @@ export default function Contact() {
       className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-32"
     >
       <div ref={contentRef} className="text-center">
+        <SectionLabel>Contact</SectionLabel>
         <h2
           ref={headingRef}
           className="font-display mb-8 text-5xl font-bold text-white md:text-7xl opacity-0"
@@ -172,7 +174,7 @@ export default function Contact() {
 
       {/* Footer */}
       <footer className="absolute bottom-8 left-0 right-0 px-4">
-        <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-2 text-xs text-[#64748b] sm:flex-row">
+        <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-2 text-xs text-[#8b98ad] sm:flex-row">
           <p>
             &copy; {new Date().getFullYear()} Yash Goyal · Built with React, Three.js &amp; GSAP
           </p>

@@ -52,7 +52,7 @@ export function TokenStreamAnimation() {
       onMouseLeave={() => setIsPlaying(true)}
     >
       <div className="flex items-center justify-between">
-        <div className="text-[#64748b] text-xs">LLM Token Generation (Hover to pause)</div>
+        <div className="text-[#8b98ad] text-xs">LLM Token Generation (Hover to pause)</div>
         <button
           onClick={handleReset}
           className="text-xs px-2 py-1 rounded bg-[#3cd0bd]/20 text-[#3cd0bd] hover:bg-[#3cd0bd]/40 transition-colors"
@@ -73,7 +73,7 @@ export function TokenStreamAnimation() {
           </span>
         ))}
         {visibleTokens.length === 0 && (
-          <span className="text-[#64748b] animate-pulse">initializing...</span>
+          <span className="text-[#8b98ad] animate-pulse">initializing...</span>
         )}
       </div>
     </div>
@@ -150,7 +150,7 @@ export function AgentThinkingAnimation() {
       className="space-y-3 rounded-lg border border-[#3cd0bd]/20 bg-[#0a1118]/50 p-4 backdrop-blur-sm"
     >
       <div className="flex items-center justify-between mb-3">
-        <div className="text-[#64748b] text-xs">Interactive Agent Reasoning Pipeline</div>
+        <div className="text-[#8b98ad] text-xs">Interactive Agent Reasoning Pipeline</div>
       </div>
       
       {/* Interactive Input */}
@@ -286,7 +286,7 @@ export function NeuralNetworkPulse() {
 
   return (
     <div className="space-y-2 rounded-lg border border-[#3cd0bd]/20 bg-[#0a1118]/50 p-4 backdrop-blur-sm">
-      <div className="text-[#64748b] text-xs mb-3">Interactive Network Layer (Click any node to forward-propagate)</div>
+      <div className="text-[#8b98ad] text-xs mb-3">Interactive Network Layer (Click any node to forward-propagate)</div>
       <div className="relative h-36">
         <svg
           className="absolute inset-0 h-full w-full pointer-events-none"

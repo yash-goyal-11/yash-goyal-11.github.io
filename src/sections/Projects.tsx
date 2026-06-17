@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { AICapabilityBadge } from '../components/AIVisualization'
+import SectionLabel from '../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -79,12 +80,12 @@ const projects: Project[] = [
     title: 'Real-Time Traffic Analysis',
     subtitle: 'Computer Vision at Scale',
     description:
-      'Deployed vehicle detection to AWS with 95% accuracy and 30% latency reduction, plus ML forecasting for congestion prediction.',
+      'Deployed vehicle detection to AWS with high accuracy and ~25% latency reduction, plus ML forecasting for congestion prediction.',
     tech: ['Python', 'OpenCV', 'AWS', 'YOLOv5', 'Flask'],
     image: '/project-3-bg.jpg',
     highlights: [
-      '95% vehicle detection accuracy',
-      '~30% latency reduction',
+      'Real-time vehicle detection (YOLOv5)',
+      '~25% latency reduction',
       'ML congestion forecasting',
     ],
   },
@@ -162,10 +163,11 @@ export default function Projects() {
       className="relative z-10 pb-10"
     >
       <div className="py-8 text-center">
+        <SectionLabel>Work</SectionLabel>
         <h2 className="font-display text-4xl font-bold text-white md:text-5xl">
           Featured <span className="text-[#3cd0bd]">Projects</span>
         </h2>
-        <p className="mt-4 text-[#64748b]">Scroll to explore</p>
+        <p className="mt-4 text-[#8b98ad]">Scroll to explore</p>
       </div>
 
       <div ref={containerRef} className="relative flex h-[85vh] w-full items-center overflow-hidden">

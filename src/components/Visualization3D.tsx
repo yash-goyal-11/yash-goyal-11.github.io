@@ -194,7 +194,7 @@ export function DataPipeline3D() {
 
   return (
     <div ref={ref} className="rounded-lg border border-[#3cd0bd]/20 bg-[#0a1118]/50 p-4 backdrop-blur-sm h-[300px] cursor-grab active:cursor-grabbing pointer-events-auto relative z-10">
-      <div className="text-[#64748b] text-xs mb-2">3D Data Pipeline</div>
+      <div className="text-[#8b98ad] text-xs mb-2">3D Data Pipeline</div>
       {isVisible && (
         <Canvas
           camera={{ position: [0, 0, 20], fov: 55 }}
@@ -232,7 +232,7 @@ export function NeuralNetwork3D() {
 
   return (
     <div ref={ref} className="rounded-lg border border-[#3cd0bd]/20 bg-[#0a1118]/50 p-4 backdrop-blur-sm h-[300px] cursor-grab active:cursor-grabbing pointer-events-auto relative z-10">
-      <div className="text-[#64748b] text-xs mb-2">3D Neural Network</div>
+      <div className="text-[#8b98ad] text-xs mb-2">3D Neural Network</div>
       {isVisible && (
         <Canvas
           camera={{ position: [0, 0, 18], fov: 50 }}
